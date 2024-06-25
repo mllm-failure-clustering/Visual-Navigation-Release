@@ -73,11 +73,15 @@ class Shape():
     if material_file is not None:
       logging.error('Ignoring material file input, reading them off obj file.')
     load_flags = self.get_pyassimp_load_options()
+    file_name_with_extension = os.path.basename(obj_file)
+    file_name, _ = os.path.splitext(file_name_with_extension)
     scene = assimp.load(obj_file, processing=load_flags)
     filter_ind = self._filter_triangles(scene.meshes)
     self.meshes = [scene.meshes[i] for i in filter_ind]
     for i, m in enumerate(self.meshes):
-      m.name = name_prefix + m.name + '_{:05d}'.format(i) + name_suffix
+      # m.name = name_prefix + m.name + '_{:05d}'.format(i) + name_suffix
+      m.name = f'{file_name}_{i:03}.jpg'
+
     logging.error('#Meshes: %d', len(self.meshes))
 
     dir_name = os.path.dirname(obj_file)
@@ -86,9 +90,10 @@ class Shape():
     if load_materials:
       materials = []
       for m in self.meshes:
-        file_name = os.path.join(dir_name, m.material.properties[('file', 1)])
+        # file_name = os.path.join(dir_name, m.material.properties[('file', 1)])
+        file_name = file_name = os.path.join(dir_name, m.name)
         assert(os.path.exists(file_name)), \
-            'Texture file {:s} foes not exist.'.format(file_name)
+            'Texture file {:s} does not exist.'.format(file_name)
         img_rgb = cv2.imread(file_name)[::-1,:,::-1]
         if img_rgb.shape[0] != img_rgb.shape[1]:
           logging.warn('Texture image not square.')
