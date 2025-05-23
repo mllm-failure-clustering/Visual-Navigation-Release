@@ -1,5 +1,6 @@
 from dotmap import DotMap
-from simulators.sbpd_simulator import SBPDSimulator
+# from simulators.sbpd_simulator import SBPDSimulator             # FOR DEFAULT POLICY
+from simulators.clustering_simulator import SBPDSimulator         # FOR CLUSTERING BASED RUNTIME MONITOR
 from params.obstacle_map.sbpd_obstacle_map_params import create_params as create_obstacle_map_params
 from params.simulator.simulator_params import create_params as create_simulator_params 
 
